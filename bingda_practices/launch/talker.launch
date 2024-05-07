@@ -1,0 +1,3 @@
+<launch>
+ <node pkg = "bingda_practices" type = "talker" name = "talker" output = "screen"/>
+</launch>
