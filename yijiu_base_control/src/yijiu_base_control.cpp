@@ -1,6 +1,6 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-
+#include "parammgr.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,33 +20,57 @@ int init_serial(void);
 int read_datas_tty(int fd,char *rcv_buf,int sec,int usec);
 int main(int argc, char **argv)
 {
-    int res,fd ,n;
-    pthread_t a_thread;
-    void *thread_result;
-    fd = init_serial();
-    printf("main fd= %d\n",fd);
-    res = pthread_create(&a_thread,NULL,thread_function,(void *)(&fd));
-    if(res!=0){
-        perror("Thread creation failed.");
-        exit(EXIT_FAILURE);
-    }
-    printf("Waiting for thread to finish..\n");
-    printf("Send data\n");
-    while(1)
-    {
-        n = write(fd, hex_data, sizeof(hex_data)); // 发送数据
-        if (n < 0)
-        {
-            perror("Write error");
-            break;
-        }
-        printf("Send:%d\n", n);
-        sleep(10);
-    }
+    // int res,fd ,n;
+    // pthread_t a_thread;
+    // void *thread_result;
+    // fd = init_serial();
+    // printf("main fd= %d\n",fd);
+    // res = pthread_create(&a_thread,NULL,thread_function,(void *)(&fd));
+    // if(res!=0){
+    //     perror("Thread creation failed.");
+    //     exit(EXIT_FAILURE);
+    // }
+    // printf("Waiting for thread to finish..\n");
+    // printf("Send data\n");
+    // while(1)
+    // {
+    //     n = write(fd, hex_data, sizeof(hex_data)); // 发送数据
+    //     if (n < 0)
+    //     {
+    //         perror("Write error");
+    //         break;
+    //     }
+    //     printf("Send:%d\n", n);
+    //     sleep(10);
+    // }
     
-    printf("close\n");
-    close(fd);
-    exit(EXIT_SUCCESS); 
+    // printf("close\n");
+    // close(fd);
+    // exit(EXIT_SUCCESS); 
+
+    // return 0;
+
+
+    ros::init(argc, argv, "yijiu_base_control");
+
+    // 创建节点句柄
+    ros::NodeHandle nh("~");
+
+    // 声明一个变量来存储参数值，默认值是 "base_footprint"
+    std::string base_id_param = "base_footprint_old";
+
+    // 使用getParam()方法获取参数值，如果获取失败，则使用默认值
+    if (!nh.getParam("base_id", base_id_param)) {
+        ROS_WARN("Failed to get parameter 'base_id'. Using default value.");
+    }
+
+    // 输出参数值
+    ROS_INFO("base_id_param: %s", base_id_param.c_str());
+
+    // 这里可以继续使用参数值进行后续操作
+    ParamMgr::Instance()->init();
+    // 进入ROS循环
+    ros::spin();
 
     return 0;
 }

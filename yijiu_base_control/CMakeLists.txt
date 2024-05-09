@@ -116,6 +116,8 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 include
+src/parammgr
+src/common
 ${catkin_INCLUDE_DIRS}
 )
 
@@ -203,6 +205,12 @@ ${catkin_INCLUDE_DIRS}
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+# set(SOURCES_FILES 
+# src/parammgr/parammgr.cpp 
+# )
+file(GLOB SOURCE_FILES "*.cpp" "*/*.cpp" "*/*/*.cpp" "*/*/*/*.cpp")
+# file(GLOB FILE_TRANS_FILES "src/file_trans/impl/src/*/*.cpp")
 
-add_executable(yijiu_base_control src/yijiu_base_control.cpp)
+add_executable(yijiu_base_control src/yijiu_base_control.cpp ${SOURCE_FILES})
+add_dependencies(yijiu_base_control ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(yijiu_base_control ${catkin_LIBRARIES})
