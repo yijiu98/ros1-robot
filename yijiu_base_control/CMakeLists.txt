@@ -119,6 +119,7 @@ include
 src/parammgr
 src/common
 src/serialInterface
+src/ProtocolMgr
 ${catkin_INCLUDE_DIRS}
 )
 

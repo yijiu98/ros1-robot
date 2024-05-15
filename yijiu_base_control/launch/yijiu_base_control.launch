@@ -21,6 +21,7 @@
 
     <!--ros namespace name can NOT be empty,so need evaluate use multi robot or not,this code is null-->
     <group if="$(eval robot_name == '')">
+        <!--name，而是该节点的名称-->
         <node pkg = "yijiu_base_control" type = "yijiu_base_control" name = "yijiu_base_control" output = "screen">
             <param name="baudrate"   value="115200"/>  
             <param name="port"  value='/dev/move_base'/>
