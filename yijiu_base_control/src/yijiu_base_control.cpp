@@ -23,6 +23,54 @@ int init_serial(void);
 int read_datas_tty(int fd,char *rcv_buf,int sec,int usec);
 int main(int argc, char **argv)
 {
+
+    //get params
+    ros::init(argc, argv, "yijiu_base_control");
+
+    // 创建节点句柄
+    ros::NodeHandle nh("~");
+
+    // 声明一个变量来存储参数值，
+    std::string odom_topic = "odom_topic";
+    std::string battery_topic = "battery_topic";
+    std::string cmd_vel_topic = "cmd_vel_topic";
+    // 使用getParam()方法获取参数值，如果获取失败，则使用默认值
+    if (!nh.getParam("odom_topic", odom_topic)) 
+    {
+        ROS_WARN("Failed to get parameter 'odom_topic'. Using default value.");
+    }
+    else
+    {
+        ROS_INFO("odom_topic: %s", odom_topic.c_str());
+    }
+    if (!nh.getParam("battery_topic", battery_topic)) 
+    {
+        ROS_WARN("Failed to get parameter 'battery_topic'. Using default value.");
+    }
+    else
+    {
+        ROS_INFO("battery_topic: %s", battery_topic.c_str());
+    }
+    if (!nh.getParam("cmd_vel_topic", cmd_vel_topic)) 
+    {
+        ROS_WARN("Failed to get parameter 'cmd_vel_topic'. Using default value.");
+    }
+    else
+    {
+        ROS_INFO("cmd_vel_topic: %s", cmd_vel_topic.c_str());
+    }
+
+    
+
+    // 这里可以继续使用参数值进行后续操作
+    // ParamMgr::Instance()->init();
+    // SerialInf::Instance()->init();
+    // 进入ROS循环
+    ros::spin();
+
+    return 0;
+
+
     // int res,fd ,n;
     // pthread_t a_thread;
     // void *thread_result;
@@ -54,59 +102,37 @@ int main(int argc, char **argv)
     // return 0;
 
 
+   
+
     // ros::init(argc, argv, "yijiu_base_control");
 
-    // // 创建节点句柄
-    // ros::NodeHandle nh("~");
+    // // 创建 ROS 节点句柄
+    // ros::NodeHandle nh;
 
-    // // 声明一个变量来存储参数值，默认值是 "base_footprint"
-    // std::string base_id_param = "base_footprint_old";
+    // // 创建一个发布者，用于发布 sensor_msgs/BatteryState 类型的消息
+    // ros::Publisher battery_pub = nh.advertise<sensor_msgs::BatteryState>("/battery", 10);
 
-    // // 使用getParam()方法获取参数值，如果获取失败，则使用默认值
-    // if (!nh.getParam("base_id", base_id_param)) {
-    //     ROS_WARN("Failed to get parameter 'base_id'. Using default value.");
+    // // 设置循环的频率
+    // ros::Rate loop_rate(10); // 发布频率为 10Hz
+
+    // while (ros::ok()) {
+    //     // 创建一个 sensor_msgs::BatteryState 消息对象
+    //     sensor_msgs::BatteryState msg;
+
+    //     // 设置消息字段值
+    //     msg.voltage = 12.3; // 电压，单位：伏特
+    //     msg.current = 0.5; // 电流，单位：安培
+    //     msg.charge = 80.0; // 电池剩余电量，单位：百分比
+    //     msg.capacity = 100.0; // 电池总容量，单位：毫安时
+
+    //     // 发布消息
+    //     battery_pub.publish(msg);
+
+    //     // 按照设置的频率休眠，保持循环频率
+    //     loop_rate.sleep();
     // }
 
-    // // 输出参数值
-    // ROS_INFO("base_id_param: %s", base_id_param.c_str());
-
-    // // 这里可以继续使用参数值进行后续操作
-    // ParamMgr::Instance()->init();
-    // SerialInf::Instance()->init();
-    // // 进入ROS循环
-    // ros::spin();
-
     // return 0;
-
-    ros::init(argc, argv, "yijiu_base_control");
-
-    // 创建 ROS 节点句柄
-    ros::NodeHandle nh;
-
-    // 创建一个发布者，用于发布 sensor_msgs/BatteryState 类型的消息
-    ros::Publisher battery_pub = nh.advertise<sensor_msgs::BatteryState>("/battery", 10);
-
-    // 设置循环的频率
-    ros::Rate loop_rate(10); // 发布频率为 10Hz
-
-    while (ros::ok()) {
-        // 创建一个 sensor_msgs::BatteryState 消息对象
-        sensor_msgs::BatteryState msg;
-
-        // 设置消息字段值
-        msg.voltage = 12.3; // 电压，单位：伏特
-        msg.current = 0.5; // 电流，单位：安培
-        msg.charge = 80.0; // 电池剩余电量，单位：百分比
-        msg.capacity = 100.0; // 电池总容量，单位：毫安时
-
-        // 发布消息
-        battery_pub.publish(msg);
-
-        // 按照设置的频率休眠，保持循环频率
-        loop_rate.sleep();
-    }
-
-    return 0;
 }
 
 void *thread_function(void *arg)
