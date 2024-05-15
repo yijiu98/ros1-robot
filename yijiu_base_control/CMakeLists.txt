@@ -118,6 +118,7 @@ include_directories(
 include
 src/parammgr
 src/common
+src/serialInterface
 ${catkin_INCLUDE_DIRS}
 )
 
